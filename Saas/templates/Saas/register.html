@@ -1,0 +1,142 @@
+{% extends 'Saas/base_auth.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+.auth-page{font-family:'Inter',sans-serif;min-height:100vh;display:flex}
+
+.auth-left{flex:1;background:#05080f;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:64px 56px}
+.auth-left::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.al-orb{position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.12) 0%,transparent 65%);pointer-events:none}
+.al-orb2{position:absolute;bottom:-80px;left:-40px;width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 65%);pointer-events:none}
+.al-inner{position:relative;z-index:1;max-width:420px}
+
+.auth-logo{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#f1f5f9;letter-spacing:-0.03em;text-decoration:none;display:block;margin-bottom:56px}
+.auth-logo em{font-style:normal;background:linear-gradient(135deg,#60a5fa,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.al-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:800;color:#f1f5f9;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px}
+.al-title span{background:linear-gradient(135deg,#60a5fa 20%,#a78bfa 60%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.al-desc{font-size:14px;color:#64748b;line-height:1.7;margin-bottom:48px}
+
+.al-checks{display:flex;flex-direction:column;gap:12px}
+.al-check{display:flex;align-items:center;gap:10px;font-size:13px;color:#64748b}
+.al-check svg{width:16px;height:16px;stroke:#22c55e;fill:none;stroke-width:2;flex-shrink:0}
+
+.auth-right{width:520px;flex-shrink:0;background:#ffffff;display:flex;flex-direction:column;justify-content:center;padding:64px 48px;position:relative;overflow:hidden}
+.auth-right::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.ar-inner{position:relative;z-index:1;max-width:380px;margin:0 auto;width:100%}
+
+.ar-title{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;color:#0f172a;margin-bottom:6px}
+.ar-sub{font-size:14px;color:#94a3b8;margin-bottom:32px}
+.ar-sub a{color:#3b82f6;text-decoration:none;font-weight:500}
+.ar-sub a:hover{text-decoration:underline}
+
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:#475569;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:7px}
+.form-input{width:100%;padding:11px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;font-size:14px;color:#0f172a;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.form-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.1);background:#fff}
+.form-input::placeholder{color:#cbd5e1}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.form-hint{font-size:11px;color:#94a3b8;margin-top:5px}
+
+.btn-submit{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:14px;font-weight:600;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s,transform 0.15s;box-shadow:0 0 0 1px rgba(99,102,241,0.3),0 8px 24px rgba(59,130,246,0.2);margin-top:8px}
+.btn-submit:hover{opacity:0.9;transform:translateY(-1px)}
+
+.ar-terms{font-size:12px;color:#94a3b8;text-align:center;margin-top:16px;line-height:1.6}
+.ar-terms a{color:#3b82f6;text-decoration:none}
+.ar-terms a:hover{text-decoration:underline}
+
+.ar-errors{background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:12px 14px;margin-bottom:20px}
+.ar-errors ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.ar-errors li{font-size:13px;color:#dc2626;display:flex;align-items:center;gap:6px}
+.ar-errors li::before{content:'·';font-size:18px;line-height:1}
+
+@media(max-width:900px){
+  .auth-left{display:none}
+  .auth-right{width:100%;min-height:100vh}
+}
+</style>
+
+<div class="auth-page">
+
+  <!-- Gauche sombre -->
+  <div class="auth-left">
+    <div class="al-orb"></div>
+    <div class="al-orb2"></div>
+    <div class="al-inner">
+      <a href="{% url 'cv' %}" class="auth-logo">CV<em>Maker</em></a>
+      <h1 class="al-title">Créez votre CV<br><span>canadien parfait</span></h1>
+      <p class="al-desc">Rejoignez 500+ professionnels qui ont décroché leur emploi au Canada grâce à CVMaker. Gratuit pour commencer.</p>
+      <div class="al-checks">
+        <div class="al-check"><svg viewBox="0 0 16 16"><path d="M2 8l4 4 8-8"/></svg>Aucune carte de crédit requise</div>
+        <div class="al-check"><svg viewBox="0 0 16 16"><path d="M2 8l4 4 8-8"/></svg>50+ templates validés par des RH canadiens</div>
+        <div class="al-check"><svg viewBox="0 0 16 16"><path d="M2 8l4 4 8-8"/></svg>Score ATS automatique inclus</div>
+        <div class="al-check"><svg viewBox="0 0 16 16"><path d="M2 8l4 4 8-8"/></svg>Export PDF illimité</div>
+        <div class="al-check"><svg viewBox="0 0 16 16"><path d="M2 8l4 4 8-8"/></svg>Données 100% sécurisées</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Droite blanc -->
+  <div class="auth-right">
+    <div class="ar-inner">
+      <div class="ar-title">Créer un compte</div>
+      <p class="ar-sub">Déjà un compte ? <a href="{% url 'login' %}">Se connecter</a></p>
+
+      {% if form.errors %}
+      <div class="ar-errors">
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="id_first_name">Prénom</label>
+            <input type="text" name="first_name" id="id_first_name" class="form-input" placeholder="Khadim" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="id_last_name">Nom</label>
+            <input type="text" name="last_name" id="id_last_name" class="form-input" placeholder="Fall" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="id_email">Email</label>
+          <input type="email" name="email" id="id_email" class="form-input" placeholder="khadim@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="id_username">Nom d'utilisateur</label>
+          <input type="text" name="username" id="id_username" class="form-input" placeholder="khadimfall" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="id_password1">Mot de passe</label>
+          <input type="password" name="password1" id="id_password1" class="form-input" placeholder="••••••••" required>
+          <div class="form-hint">Minimum 8 caractères</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="id_password2">Confirmer le mot de passe</label>
+          <input type="password" name="password2" id="id_password2" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit">Créer mon compte →</button>
+        <p class="ar-terms">En créant un compte, vous acceptez nos <a href="#">Conditions d'utilisation</a> et notre <a href="#">Politique de confidentialité</a>.</p>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

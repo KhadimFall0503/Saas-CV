@@ -1,0 +1,387 @@
+<!-- templates/templates.html -->
+{% extends 'Saas/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.tp{font-family:'Inter',sans-serif}
+.grad{background:linear-gradient(135deg,#60a5fa 20%,#a78bfa 60%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* HERO sombre */
+.tp-hero{background:#05080f;padding:80px 56px 64px;position:relative;overflow:hidden;text-align:center}
+.tp-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.th-orb{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(59,130,246,0.11) 0%,transparent 65%);pointer-events:none}
+.th-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
+.th-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:16px}
+.th-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;color:#f1f5f9;line-height:1.08;letter-spacing:-0.03em;margin-bottom:16px}
+.th-desc{font-size:15px;color:#64748b;line-height:1.7;margin-bottom:36px}
+.filters{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.filter-btn{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#64748b;font-family:'Inter',sans-serif}
+.filter-btn:hover{border-color:rgba(59,130,246,0.3);color:#93c5fd}
+.filter-btn.active{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3);color:#93c5fd}
+
+/* GRID blanc */
+.tp-grid-section{background:#f8fafc;padding:72px 56px;position:relative;overflow:hidden}
+.tp-grid-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.grid-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+.tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+/* Template card */
+.tpl-card{background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;position:relative}
+.tpl-card:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(59,130,246,0.08)}
+.tpl-card.popular::after{content:'Populaire';position:absolute;top:12px;right:12px;padding:3px 10px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:999px;font-size:10px;font-weight:600;color:#fff;font-family:'Bricolage Grotesque',sans-serif;z-index:2}
+.tpl-card.new::after{content:'Nouveau';position:absolute;top:12px;right:12px;padding:3px 10px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:999px;font-size:10px;font-weight:600;color:#fff;font-family:'Bricolage Grotesque',sans-serif;z-index:2}
+
+/* CV miniatures */
+.tpl-preview{height:200px;position:relative;overflow:hidden}
+.tpl-cv{padding:14px;height:100%;display:flex;flex-direction:column;gap:8px}
+.acc-blue .tpl-preview{background:linear-gradient(180deg,#eff6ff,#f8fafc)}
+.acc-violet .tpl-preview{background:linear-gradient(180deg,#f5f3ff,#f8fafc)}
+.acc-emerald .tpl-preview{background:linear-gradient(180deg,#ecfdf5,#f8fafc)}
+.acc-rose .tpl-preview{background:linear-gradient(180deg,#fff1f2,#f8fafc)}
+.acc-amber .tpl-preview{background:linear-gradient(180deg,#fffbeb,#f8fafc)}
+.acc-slate .tpl-preview{background:linear-gradient(180deg,#f1f5f9,#f8fafc)}
+.acc-cyan .tpl-preview{background:linear-gradient(180deg,#ecfeff,#f8fafc)}
+.acc-indigo .tpl-preview{background:linear-gradient(180deg,#eef2ff,#f8fafc)}
+.acc-dark .tpl-preview{background:#0f172a}
+
+.cv-mini-top{display:flex;align-items:center;gap:6px;padding-bottom:8px;margin-bottom:4px}
+.acc-blue .cv-mini-top{border-bottom:2px solid #3b82f6}
+.acc-violet .cv-mini-top{border-bottom:2px solid #8b5cf6}
+.acc-emerald .cv-mini-top{border-bottom:2px solid #10b981}
+.acc-rose .cv-mini-top{border-bottom:2px solid #f43f5e}
+.acc-amber .cv-mini-top{border-bottom:2px solid #f59e0b}
+.acc-slate .cv-mini-top{border-bottom:2px solid #64748b}
+.acc-cyan .cv-mini-top{border-bottom:2px solid #06b6d4}
+.acc-indigo .cv-mini-top{border-bottom:2px solid #6366f1}
+.acc-dark .cv-mini-top{border-bottom:2px solid #60a5fa}
+
+.cv-mini-ava{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fff;font-family:'Bricolage Grotesque',sans-serif}
+.acc-blue .cv-mini-ava{background:linear-gradient(135deg,#3b82f6,#6366f1)}
+.acc-violet .cv-mini-ava{background:linear-gradient(135deg,#8b5cf6,#ec4899)}
+.acc-emerald .cv-mini-ava{background:linear-gradient(135deg,#10b981,#06b6d4)}
+.acc-rose .cv-mini-ava{background:linear-gradient(135deg,#f43f5e,#f97316)}
+.acc-amber .cv-mini-ava{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.acc-slate .cv-mini-ava{background:linear-gradient(135deg,#64748b,#475569)}
+.acc-cyan .cv-mini-ava{background:linear-gradient(135deg,#06b6d4,#3b82f6)}
+.acc-indigo .cv-mini-ava{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.acc-dark .cv-mini-ava{background:linear-gradient(135deg,#3b82f6,#6366f1)}
+
+.cv-mini-info{flex:1}
+.cv-name-line{height:6px;border-radius:2px;margin-bottom:3px}
+.cv-role-line{height:4px;border-radius:2px;width:60%}
+.acc-blue .cv-name-line,.acc-blue .cv-role-line{background:#bfdbfe}
+.acc-violet .cv-name-line,.acc-violet .cv-role-line{background:#ddd6fe}
+.acc-emerald .cv-name-line,.acc-emerald .cv-role-line{background:#a7f3d0}
+.acc-rose .cv-name-line,.acc-rose .cv-role-line{background:#fecdd3}
+.acc-amber .cv-name-line,.acc-amber .cv-role-line{background:#fde68a}
+.acc-slate .cv-name-line,.acc-slate .cv-role-line{background:#cbd5e1}
+.acc-cyan .cv-name-line,.acc-cyan .cv-role-line{background:#a5f3fc}
+.acc-indigo .cv-name-line,.acc-indigo .cv-role-line{background:#c7d2fe}
+.acc-dark .cv-name-line,.acc-dark .cv-role-line{background:#1e3a5f}
+
+.cv-mini-body{display:flex;flex-direction:column;gap:5px;flex:1}
+.cv-sec{display:flex;flex-direction:column;gap:3px}
+.cv-sec-h{height:4px;width:35%;border-radius:2px;margin-bottom:2px}
+.cv-sec-l{height:3px;border-radius:2px}
+.cv-sec-l.w90{width:90%}.cv-sec-l.w80{width:80%}.cv-sec-l.w70{width:70%}.cv-sec-l.w55{width:55%}
+.acc-blue .cv-sec-h{background:#93c5fd}.acc-blue .cv-sec-l{background:#dbeafe}
+.acc-violet .cv-sec-h{background:#c4b5fd}.acc-violet .cv-sec-l{background:#ede9fe}
+.acc-emerald .cv-sec-h{background:#6ee7b7}.acc-emerald .cv-sec-l{background:#d1fae5}
+.acc-rose .cv-sec-h{background:#fda4af}.acc-rose .cv-sec-l{background:#ffe4e6}
+.acc-amber .cv-sec-h{background:#fcd34d}.acc-amber .cv-sec-l{background:#fef9c3}
+.acc-slate .cv-sec-h{background:#94a3b8}.acc-slate .cv-sec-l{background:#e2e8f0}
+.acc-cyan .cv-sec-h{background:#67e8f9}.acc-cyan .cv-sec-l{background:#cffafe}
+.acc-indigo .cv-sec-h{background:#a5b4fc}.acc-indigo .cv-sec-l{background:#e0e7ff}
+.acc-dark .cv-sec-h{background:#1e40af}.acc-dark .cv-sec-l{background:#172554}
+
+.cv-mini-2col{display:grid;grid-template-columns:1fr 1.6fr;gap:6px}
+.cv-sidebar{display:flex;flex-direction:column;gap:4px;padding-right:6px}
+.cv-main-col{display:flex;flex-direction:column;gap:4px}
+
+.tpl-footer{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f1f5f9}
+.tpl-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:#0f172a}
+.tpl-cat{font-size:11px;color:#94a3b8;margin-top:1px}
+.tpl-use-btn{padding:6px 14px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:12px;font-weight:600;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s}
+.tpl-use-btn:hover{opacity:0.85}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#ffffff;border-radius:20px;max-width:860px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(16px) scale(0.98);transition:transform 0.2s}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{padding:20px 24px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#0f172a}
+.modal-close{width:32px;height:32px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#64748b;transition:background 0.2s}
+.modal-close:hover{background:#e2e8f0}
+.modal-body{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
+.modal-preview{background:#f8fafc;padding:32px;display:flex;align-items:center;justify-content:center;border-right:1px solid #e2e8f0}
+.modal-cv-big{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;width:100%;max-width:280px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.modal-info{padding:28px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.modal-cat-badge{display:inline-flex;align-items:center;padding:4px 12px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:999px;font-size:11px;color:#3b82f6;font-weight:500;width:fit-content}
+.modal-tpl-name{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;color:#0f172a;line-height:1.1}
+.modal-tpl-desc{font-size:14px;color:#64748b;line-height:1.7}
+.modal-features{display:flex;flex-direction:column;gap:8px}
+.modal-feat{display:flex;align-items:center;gap:8px;font-size:13px;color:#475569}
+.modal-feat svg{width:14px;height:14px;stroke:#22c55e;flex-shrink:0;fill:none;stroke-width:2}
+.modal-btns{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.modal-btn-p{padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:14px;font-weight:600;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s;box-shadow:0 4px 16px rgba(59,130,246,0.2)}
+.modal-btn-p:hover{opacity:0.9}
+.modal-btn-g{padding:11px;background:transparent;color:#64748b;font-size:14px;font-weight:500;border-radius:10px;border:1px solid #e2e8f0;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s}
+.modal-btn-g:hover{background:#f8fafc}
+
+/* CTA sombre */
+.tp-cta{background:#05080f;padding:72px 56px;position:relative;overflow:hidden;text-align:center}
+.tp-cta::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.tc-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(59,130,246,0.09) 0%,transparent 65%);pointer-events:none}
+.tc-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.tc-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3.5vw,44px);font-weight:800;color:#f1f5f9;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px}
+.tc-desc{font-size:15px;color:#64748b;margin-bottom:32px}
+.tc-btns{display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-p{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:14px;font-weight:600;border-radius:9px;border:none;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;transition:opacity 0.2s,transform 0.15s;box-shadow:0 8px 24px rgba(59,130,246,0.25)}
+.btn-p:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-g{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;background:rgba(255,255,255,0.04);color:#94a3b8;font-size:14px;font-weight:500;border-radius:9px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;transition:background 0.2s,color 0.2s}
+.btn-g:hover{background:rgba(255,255,255,0.07);color:#e2e8f0}
+
+@media(max-width:768px){
+  .tp-hero,.tp-grid-section,.tp-cta{padding:56px 24px}
+  .tpl-grid{grid-template-columns:1fr 1fr}
+  .modal-body{grid-template-columns:1fr}
+  .modal-preview{display:none}
+}
+@media(max-width:480px){.tpl-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="tp">
+
+  <!-- HERO sombre -->
+  <section class="tp-hero">
+    <div class="th-orb"></div>
+    <div class="th-inner">
+      <div class="th-label">Templates</div>
+      <h1 class="th-title">Choisissez votre <span class="grad">template canadien</span></h1>
+      <p class="th-desc">9 modèles professionnels validés par des recruteurs canadiens. Tous optimisés ATS, tous personnalisables.</p>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterTpl(this,'all')">Tous</button>
+        <button class="filter-btn" onclick="filterTpl(this,'tech')">Tech</button>
+        <button class="filter-btn" onclick="filterTpl(this,'finance')">Finance</button>
+        <button class="filter-btn" onclick="filterTpl(this,'design')">Design</button>
+        <button class="filter-btn" onclick="filterTpl(this,'sante')">Santé</button>
+        <button class="filter-btn" onclick="filterTpl(this,'classic')">Classique</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID blanc -->
+  <section class="tp-grid-section">
+    <div class="grid-inner">
+      <div class="tpl-grid" id="tpl-grid">
+
+        <div class="tpl-card acc-blue popular" data-cat="tech" onclick="openModal('Moderne Bleu','Tech & Développement','Un template épuré aux tons bleus, idéal pour les développeurs et ingénieurs.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">KF</div><div class="cv-mini-info"><div class="cv-name-line" style="width:70%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div><div class="cv-sec-l w70"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w80"></div><div class="cv-sec-l w55"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w70"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Moderne Bleu</div><div class="tpl-cat">Tech & Développement</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-violet" data-cat="finance" onclick="openModal('Élégant Violet','Finance & Conseil','Design sophistiqué aux tons violets, parfait pour la finance, le conseil et le droit.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">AB</div><div class="cv-mini-info"><div class="cv-name-line" style="width:65%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div><div class="cv-sec-l w80"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w70"></div><div class="cv-sec-l w90"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w55"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Élégant Violet</div><div class="tpl-cat">Finance & Conseil</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-emerald new" data-cat="sante" onclick="openModal('Nature Vert','Santé & Sciences','Tons verts apaisants pour les professionnels de la santé, biologie et sciences.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">ML</div><div class="cv-mini-info"><div class="cv-name-line" style="width:75%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w80"></div><div class="cv-sec-l w70"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div><div class="cv-sec-l w55"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w70"></div><div class="cv-sec-l w80"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Nature Vert</div><div class="tpl-cat">Santé & Sciences</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-rose" data-cat="design" onclick="openModal('Bold Rose','Design & Créatif','Template audacieux aux tons rosés, conçu pour les créatifs, designers et communicants.')">
+          <div class="tpl-preview"><div class="tpl-cv cv-mini-2col" style="padding:14px">
+            <div class="cv-sidebar" style="border-right:1px solid #fecdd3;padding-right:6px">
+              <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#f43f5e,#f97316);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fff;font-family:'Bricolage Grotesque',sans-serif">SR</div>
+              <div style="height:3px;background:#fecdd3;border-radius:2px;width:80%;margin-top:8px"></div>
+              <div style="height:3px;background:#fecdd3;border-radius:2px;width:60%"></div>
+              <div style="height:3px;background:#fecdd3;border-radius:2px;width:70%;margin-top:6px"></div>
+            </div>
+            <div class="cv-main-col">
+              <div style="height:5px;background:#fecdd3;border-radius:2px;width:80%;margin-bottom:4px"></div>
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#fda4af"></div><div class="cv-sec-l w80" style="background:#ffe4e6"></div><div class="cv-sec-l w55" style="background:#ffe4e6"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#fda4af"></div><div class="cv-sec-l w90" style="background:#ffe4e6"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Bold Rose</div><div class="tpl-cat">Design & Créatif</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-slate" data-cat="classic" onclick="openModal('Classique Gris','Tous secteurs','Le template universel. Sobre, élégant, accepté dans tous les secteurs canadiens.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">TC</div><div class="cv-mini-info"><div class="cv-name-line" style="width:70%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div><div class="cv-sec-l w70"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w80"></div><div class="cv-sec-l w90"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w55"></div><div class="cv-sec-l w70"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Classique Gris</div><div class="tpl-cat">Tous secteurs</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-dark new" data-cat="tech" onclick="openModal('Dark Pro','Tech & IA','Template fond sombre premium pour les développeurs, data scientists et profils tech.')">
+          <div class="tpl-preview" style="background:#0f172a"><div class="tpl-cv">
+            <div class="cv-mini-top" style="border-bottom:2px solid #60a5fa"><div class="cv-mini-ava">KN</div><div class="cv-mini-info"><div class="cv-name-line" style="width:70%;background:#1e3a5f"></div><div class="cv-role-line" style="background:#172554"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#1e40af"></div><div class="cv-sec-l w90" style="background:#172554"></div><div class="cv-sec-l w70" style="background:#172554"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#1e40af"></div><div class="cv-sec-l w80" style="background:#172554"></div><div class="cv-sec-l w55" style="background:#172554"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Dark Pro</div><div class="tpl-cat">Tech & IA</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-amber" data-cat="finance" onclick="openModal('Soleil Amber','Marketing & Ventes','Tons chauds dorés pour les profils marketing, ventes, RH et gestion de projets.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">PD</div><div class="cv-mini-info"><div class="cv-name-line" style="width:65%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w80"></div><div class="cv-sec-l w90"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w70"></div><div class="cv-sec-l w55"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Soleil Amber</div><div class="tpl-cat">Marketing & Ventes</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-cyan" data-cat="design" onclick="openModal('Ocean Cyan','Design & UX','Tons cyan frais pour les designers UX/UI, product managers et profils digitaux.')">
+          <div class="tpl-preview"><div class="tpl-cv cv-mini-2col" style="padding:14px">
+            <div class="cv-sidebar" style="border-right:1px solid #a5f3fc;padding-right:6px">
+              <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fff;font-family:'Bricolage Grotesque',sans-serif">LM</div>
+              <div style="height:3px;background:#a5f3fc;border-radius:2px;width:80%;margin-top:8px"></div>
+              <div style="height:3px;background:#a5f3fc;border-radius:2px;width:55%"></div>
+              <div style="height:3px;background:#a5f3fc;border-radius:2px;width:70%;margin-top:6px"></div>
+            </div>
+            <div class="cv-main-col">
+              <div style="height:5px;background:#a5f3fc;border-radius:2px;width:75%;margin-bottom:4px"></div>
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#67e8f9"></div><div class="cv-sec-l w80" style="background:#cffafe"></div><div class="cv-sec-l w55" style="background:#cffafe"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h" style="background:#67e8f9"></div><div class="cv-sec-l w90" style="background:#cffafe"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Ocean Cyan</div><div class="tpl-cat">Design & UX</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+        <div class="tpl-card acc-indigo" data-cat="classic" onclick="openModal('Indigo Pro','Tous secteurs','Template sobre et élégant aux tons indigo. Polyvalent, moderne, apprécié de tous les recruteurs.')">
+          <div class="tpl-preview"><div class="tpl-cv">
+            <div class="cv-mini-top"><div class="cv-mini-ava">RF</div><div class="cv-mini-info"><div class="cv-name-line" style="width:72%"></div><div class="cv-role-line"></div></div></div>
+            <div class="cv-mini-body">
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w90"></div><div class="cv-sec-l w70"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w80"></div><div class="cv-sec-l w90"></div></div>
+              <div class="cv-sec"><div class="cv-sec-h"></div><div class="cv-sec-l w55"></div><div class="cv-sec-l w70"></div></div>
+            </div>
+          </div></div>
+          <div class="tpl-footer"><div><div class="tpl-name">Indigo Pro</div><div class="tpl-cat">Tous secteurs</div></div><button class="tpl-use-btn">Utiliser</button></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA sombre -->
+  <section class="tp-cta">
+    <div class="tc-orb"></div>
+    <div class="tc-inner">
+      <h2 class="tc-title">Votre template idéal vous <span class="grad">attend</span></h2>
+      <p class="tc-desc">Choisissez, personnalisez et exportez votre CV canadien en quelques minutes.</p>
+      <div class="tc-btns">
+        <a href="{% url 'create-cv' %}" class="btn-p">Créer mon CV gratuitement</a>
+        <a href="{% url 'about' %}" class="btn-g">En savoir plus →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="modal-name">Template</span>
+      <div class="modal-close" onclick="closeModalDirect()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-preview">
+        <div class="modal-cv-big">
+          <div style="display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:2px solid #3b82f6;margin-bottom:12px">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0">KF</div>
+            <div>
+              <div style="height:8px;background:#bfdbfe;border-radius:3px;width:100px;margin-bottom:4px"></div>
+              <div style="height:6px;background:#dbeafe;border-radius:3px;width:70px"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><div style="height:5px;background:#93c5fd;border-radius:2px;width:40%;margin-bottom:5px"></div><div style="height:4px;background:#dbeafe;border-radius:2px;width:95%;margin-bottom:3px"></div><div style="height:4px;background:#dbeafe;border-radius:2px;width:80%"></div></div>
+            <div><div style="height:5px;background:#93c5fd;border-radius:2px;width:40%;margin-bottom:5px"></div><div style="height:4px;background:#dbeafe;border-radius:2px;width:90%;margin-bottom:3px"></div><div style="height:4px;background:#dbeafe;border-radius:2px;width:70%;margin-bottom:3px"></div><div style="height:4px;background:#dbeafe;border-radius:2px;width:85%"></div></div>
+            <div><div style="height:5px;background:#93c5fd;border-radius:2px;width:40%;margin-bottom:5px"></div><div style="display:flex;gap:4px;flex-wrap:wrap"><span style="padding:2px 8px;background:#dbeafe;border-radius:999px;font-size:8px;color:#3b82f6">React</span><span style="padding:2px 8px;background:#dbeafe;border-radius:999px;font-size:8px;color:#3b82f6">Django</span><span style="padding:2px 8px;background:#dbeafe;border-radius:999px;font-size:8px;color:#3b82f6">Python</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-info">
+        <div class="modal-cat-badge" id="modal-cat">Catégorie</div>
+        <div class="modal-tpl-name" id="modal-tpl-name">Nom du template</div>
+        <p class="modal-tpl-desc" id="modal-desc">Description.</p>
+        <div class="modal-features">
+          <div class="modal-feat"><svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-7"/></svg>Optimisé ATS — score garanti 85+</div>
+          <div class="modal-feat"><svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-7"/></svg>Compatible recruteurs canadiens</div>
+          <div class="modal-feat"><svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-7"/></svg>Export PDF haute résolution</div>
+          <div class="modal-feat"><svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-7"/></svg>Entièrement personnalisable</div>
+          <div class="modal-feat"><svg viewBox="0 0 14 14"><path d="M2 7l3 3 7-7"/></svg>Police et couleurs modifiables</div>
+        </div>
+        <div class="modal-btns">
+          <button class="modal-btn-p" onclick="window.location.href='{% url 'create-cv' %}'">Utiliser ce template →</button>
+          <button class="modal-btn-g" onclick="closeModalDirect()">Continuer à parcourir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(name, cat, desc) {
+  document.getElementById('modal-name').textContent = name;
+  document.getElementById('modal-tpl-name').textContent = name;
+  document.getElementById('modal-cat').textContent = cat;
+  document.getElementById('modal-desc').textContent = desc;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) {
+  if(e.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function filterTpl(btn, cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tpl-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+  });
+}
+</script>
+
+{% endblock %}

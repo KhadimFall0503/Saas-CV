@@ -1,0 +1,96 @@
+{% extends 'Saas/base_auth.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+.auth-page{font-family:'Inter',sans-serif;min-height:100vh;display:flex}
+
+/* Gauche : visuel sombre */
+.auth-left{
+  flex:1;
+  background:#05080f;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:64px 56px;
+}
+.auth-left::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size:20px 20px;
+  z-index:0;
+}
+.auth-left h1{
+  color:white;
+  font-size:3rem;
+  font-weight:800;
+  z-index:1;
+}
+.auth-left p{
+  color:rgba(255,255,255,0.7);
+  margin-top:16px;
+  z-index:1;
+}
+
+/* Droite : formulaire */
+.auth-right{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:64px 56px;
+  background:white;
+}
+.auth-right form{
+  width:100%;
+  max-width:400px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.auth-right input{
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+.auth-right button{
+  padding:12px;
+  background:#1d4ed8;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+.auth-right button:hover{
+  background:#2563eb;
+}
+</style>
+
+<div class="auth-page">
+  <div class="auth-left">
+    <h1>Bienvenue sur CVMaker</h1>
+    <p>Connectez-vous pour créer un CV professionnel canadien facilement.</p>
+  </div>
+
+  <div class="auth-right">
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+      <input type="password" name="password" placeholder="Mot de passe" required>
+      <button type="submit">Se connecter</button>
+      
+    </form>
+  </div>
+</div>
+
+{% endblock %}

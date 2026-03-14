@@ -1,187 +1,152 @@
-<!-- templates/navbar.html -->
+<!-- templates/Saas/navbar.html -->
 {% load static %}
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0}
 
-.nav-wrap {
-  font-family: 'DM Sans', sans-serif;
-  background: #080c14;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 50;
+.nav-wrap{
+  font-family:'DM Sans',sans-serif;
+  background:#080c14;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:fixed;top:0;width:100%;z-index:50;
 }
 
-.nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 68px;
+.nav-inner{
+  max-width:1200px;margin:0 auto;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;height:68px;
 }
 
-.nav-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 20px;
-  color: #f8fafc;
-  letter-spacing: -0.03em;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 2px;
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:20px;
+  color:#f8fafc;letter-spacing:-0.03em;text-decoration:none;
+  display:flex;align-items:center;gap:2px;
 }
-.nav-logo em {
-  font-style: normal;
-  color: transparent;
-  background: linear-gradient(135deg, #60a5fa, #818cf8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.nav-logo em{
+  font-style:normal;color:transparent;
+  background:linear-gradient(135deg,#60a5fa,#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  list-style: none;
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+.nav-links a{
+  font-size:14px;font-weight:500;color:#94a3b8;text-decoration:none;
+  padding:6px 12px;border-radius:8px;transition:color 0.2s,background 0.2s;
+}
+.nav-links a:hover{color:#e2e8f0;background:rgba(255,255,255,0.05)}
+.nav-links a.active{color:#e2e8f0}
+
+.nav-divider{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 8px}
+
+.nav-login{
+  font-size:14px;font-weight:500;color:#94a3b8;text-decoration:none;
+  padding:6px 12px;border-radius:8px;transition:color 0.2s,background 0.2s;
+}
+.nav-login:hover{color:#e2e8f0;background:rgba(255,255,255,0.05)}
+
+.nav-signup{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;background:#3b82f6;color:#fff;
+  font-size:14px;font-weight:500;border-radius:9px;text-decoration:none;
+  font-family:'DM Sans',sans-serif;transition:background 0.2s,transform 0.15s;margin-left:4px;
+}
+.nav-signup:hover{background:#2563eb;transform:translateY(-1px)}
+.nav-signup svg{width:13px;height:13px}
+
+/* Avatar utilisateur connecté */
+.nav-user{display:flex;align-items:center;gap:10px;margin-left:4px}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff;
+  text-decoration:none;flex-shrink:0;
+  border:2px solid rgba(59,130,246,0.3);
+  transition:border-color 0.2s;
+}
+.nav-avatar:hover{border-color:rgba(59,130,246,0.6)}
+.nav-username{font-size:13px;font-weight:500;color:#94a3b8}
+.nav-logout{
+  font-size:13px;font-weight:500;color:#64748b;text-decoration:none;
+  padding:6px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.07);
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+}
+.nav-logout:hover{color:#f87171;border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.06)}
+
+.nav-mobile-btn{
+  display:none;background:none;border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;padding:7px;cursor:pointer;color:#94a3b8;
+  transition:border-color 0.2s,background 0.2s;
+}
+.nav-mobile-btn:hover{border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.04)}
+
+.nav-mobile-menu{
+  display:none;flex-direction:column;
+  border-top:1px solid rgba(255,255,255,0.07);
+  padding:16px 24px 20px;gap:4px;
+}
+.nav-mobile-menu.open{display:flex}
+.nav-mobile-menu a{
+  font-size:14px;font-weight:500;color:#94a3b8;text-decoration:none;
+  padding:10px 12px;border-radius:8px;transition:color 0.2s,background 0.2s;
+}
+.nav-mobile-menu a:hover{color:#e2e8f0;background:rgba(255,255,255,0.05)}
+.mob-divider{height:1px;background:rgba(255,255,255,0.07);margin:8px 0}
+.mob-signup{
+  margin-top:4px;background:#3b82f6 !important;color:#fff !important;
+  text-align:center;border-radius:9px !important;padding:11px 12px !important;font-weight:500;
+}
+.mob-signup:hover{background:#2563eb !important}
+.mob-logout{
+  color:#f87171 !important;
+  border:1px solid rgba(239,68,68,0.15) !important;
+  border-radius:8px !important;
+  text-align:center;
 }
 
-.nav-links a {
-  font-size: 14px;
-  font-weight: 500;
-  color: #94a3b8;
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  transition: color 0.2s, background 0.2s;
-}
-.nav-links a:hover {
-  color: #e2e8f0;
-  background: rgba(255,255,255,0.05);
-}
-.nav-links a.active {
-  color: #e2e8f0;
-}
-
-.nav-divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255,255,255,0.1);
-  margin: 0 8px;
-}
-
-.nav-login {
-  font-size: 14px;
-  font-weight: 500;
-  color: #94a3b8;
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  transition: color 0.2s, background 0.2s;
-}
-.nav-login:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); }
-
-.nav-signup {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  background: #3b82f6;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 9px;
-  text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s, transform 0.15s;
-  margin-left: 4px;
-}
-.nav-signup:hover { background: #2563eb; transform: translateY(-1px); }
-.nav-signup svg { width: 13px; height: 13px; }
-
-.nav-mobile-btn {
-  display: none;
-  background: none;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 7px;
-  cursor: pointer;
-  color: #94a3b8;
-  transition: border-color 0.2s, background 0.2s;
-}
-.nav-mobile-btn:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
-
-.nav-mobile-menu {
-  display: none;
-  flex-direction: column;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding: 16px 24px 20px;
-  gap: 4px;
-}
-.nav-mobile-menu.open { display: flex; }
-
-.nav-mobile-menu a {
-  font-size: 14px;
-  font-weight: 500;
-  color: #94a3b8;
-  text-decoration: none;
-  padding: 10px 12px;
-  border-radius: 8px;
-  transition: color 0.2s, background 0.2s;
-}
-.nav-mobile-menu a:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); }
-
-.mob-divider {
-  height: 1px;
-  background: rgba(255,255,255,0.07);
-  margin: 8px 0;
-}
-.mob-signup {
-  margin-top: 4px;
-  background: #3b82f6 !important;
-  color: #fff !important;
-  text-align: center;
-  border-radius: 9px !important;
-  padding: 11px 12px !important;
-  font-weight: 500;
-}
-.mob-signup:hover { background: #2563eb !important; }
-
-@media (max-width: 768px) {
-  .nav-links, .nav-divider, .nav-login, .nav-signup { display: none; }
-  .nav-mobile-btn { display: flex; }
+@media(max-width:768px){
+  .nav-links,.nav-divider,.nav-login,.nav-signup,.nav-user{display:none}
+  .nav-mobile-btn{display:flex}
 }
 </style>
 
 <nav class="nav-wrap">
   <div class="nav-inner">
 
-    <a href="/" class="nav-logo">CV<em>Maker</em></a>
+    <a href="{% url 'cv' %}" class="nav-logo">CV<em>Maker</em></a>
 
     <ul class="nav-links">
-      <li><a href="/" class="active">Accueil</a></li>
-      <li><a href="/about/">À propos</a></li>
-      <li><a href="/create-cv/">Créer CV</a></li>
-      <li><a href="/templates/">Templates</a></li>
-      <li><a href="/dashboard/">Dashboard</a></li>
+      <li><a href="{% url 'cv' %}" {% if request.resolver_match.url_name == 'cv' %}class="active"{% endif %}>Accueil</a></li>
+      <li><a href="{% url 'about' %}" {% if request.resolver_match.url_name == 'about' %}class="active"{% endif %}>À propos</a></li>
+      <li><a href="{% url 'create-cv' %}" {% if request.resolver_match.url_name == 'create-cv' %}class="active"{% endif %}>Créer CV</a></li>
+      <li><a href="{% url 'modeles' %}" {% if request.resolver_match.url_name == 'modeles' or request.resolver_match.url_name == 'templates' %}class="active"{% endif %}>Templates</a></li>
     </ul>
 
-    <div style="display:flex; align-items:center; gap:4px;">
+    <div style="display:flex;align-items:center;gap:4px;">
       <div class="nav-divider"></div>
-      <a href="#" class="nav-login">Login</a>
-      <a href="#" class="nav-signup">
-        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6.5 1v11M1 6.5h11"/>
-        </svg>
-        Sign up
-      </a>
+
+      {% if user.is_authenticated %}
+        <!-- Connecté -->
+        <div class="nav-user">
+          <a href="{% url 'profile' %}" class="nav-avatar" title="Mon profil">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+          </a>
+          <a href="{% url 'profile' %}" class="nav-login">
+            {{ user.get_full_name|default:user.username }}
+          </a>
+          <a href="{% url 'logout' %}" class="nav-logout">Déconnexion</a>
+        </div>
+      {% else %}
+        <!-- Non connecté -->
+        <a href="{% url 'login' %}" class="nav-login">Connexion</a>
+        <a href="{% url 'register' %}" class="nav-signup">
+          <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6.5 1v11M1 6.5h11"/>
+          </svg>
+          S'inscrire
+        </a>
+      {% endif %}
     </div>
 
     <button class="nav-mobile-btn" id="menu-btn" aria-label="Ouvrir le menu">
@@ -192,15 +157,23 @@
 
   </div>
 
+  <!-- Menu mobile -->
   <div class="nav-mobile-menu" id="mobile-menu">
-    <a href="/">Accueil</a>
-    <a href="/about/">À propos</a>
-    <a href="/create-cv/">Créer CV</a>
-    <a href="/templates/">Templates</a>
-    <a href="/dashboard/">Dashboard</a>
+    <a href="{% url 'cv' %}">Accueil</a>
+    <a href="{% url 'about' %}">À propos</a>
+    <a href="{% url 'create-cv' %}">Créer CV</a>
+    <a href="{% url 'modeles' %}">Templates</a>
     <div class="mob-divider"></div>
-    <a href="#">Login</a>
-    <a href="#" class="mob-signup">Sign up</a>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}">
+        👤 {{ user.get_full_name|default:user.username }}
+      </a>
+      <a href="{% url 'logout' %}" class="mob-logout">Déconnexion</a>
+    {% else %}
+      <a href="{% url 'login' %}">Connexion</a>
+      <a href="{% url 'register' %}" class="mob-signup">S'inscrire</a>
+    {% endif %}
   </div>
 </nav>
 
