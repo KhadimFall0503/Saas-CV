@@ -1,0 +1,296 @@
+{% load static %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ── POURQUOI ── */
+.why{
+  font-family:'Inter',sans-serif;
+  background:#ffffff;
+  padding:96px 56px;
+  position:relative;overflow:hidden;
+}
+.why-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+
+.section-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:#3b82f6;margin-bottom:16px;
+}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:#3b82f6}
+
+.section-title{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:clamp(30px,3vw,46px);font-weight:800;
+  color:#0f172a;line-height:1.1;letter-spacing:-0.03em;margin-bottom:12px;
+}
+.section-desc{font-size:15px;color:#64748b;line-height:1.7;max-width:480px}
+
+.why-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;gap:32px;flex-wrap:wrap}
+.why-head-right{font-size:13px;color:#94a3b8;max-width:280px;line-height:1.6;text-align:right}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+.card{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:14px;padding:28px 24px;
+  transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#3b82f6,#6366f1);
+  opacity:0;transition:opacity 0.2s;
+}
+.card:hover{border-color:rgba(59,130,246,0.35);transform:translateY(-3px);box-shadow:0 12px 32px rgba(59,130,246,0.08)}
+.card:hover::before{opacity:1}
+
+.card-icon{
+  width:42px;height:42px;border-radius:10px;
+  background:rgba(59,130,246,0.06);
+  border:1px solid rgba(59,130,246,0.15);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+}
+.card-icon svg{width:18px;height:18px;stroke:#3b82f6;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.card-title{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.card-text{font-size:13px;color:#64748b;line-height:1.6}
+
+/* ── COMMENT ÇA MARCHE ── */
+.how{
+  font-family:'Inter',sans-serif;
+  background:#f8fafc;
+  padding:96px 56px;
+  position:relative;overflow:hidden;
+}
+.how-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+.how-head{text-align:center;margin-bottom:64px}
+.how-head .section-label{justify-content:center}
+.how-head .section-label::before{display:none}
+.how-head .section-title{color:#0f172a}
+.how-head .section-desc{margin:12px auto 0}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;margin-bottom:56px}
+.steps::before{
+  content:'';position:absolute;top:28px;left:calc(16.6% + 20px);right:calc(16.6% + 20px);
+  height:1px;background:linear-gradient(90deg,rgba(59,130,246,0.3),rgba(99,102,241,0.3),rgba(59,130,246,0.3));
+  z-index:0;
+}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px;position:relative;z-index:1}
+.step-num{
+  width:56px;height:56px;border-radius:50%;
+  background:#ffffff;border:1px solid rgba(59,130,246,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#3b82f6;
+  margin-bottom:20px;
+  box-shadow:0 0 0 6px rgba(59,130,246,0.05);
+}
+.step-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.step-text{font-size:13px;color:#64748b;line-height:1.6}
+
+.video-wrap{
+  background:#f1f5f9;
+  border:1px solid #e2e8f0;
+  border-radius:16px;overflow:hidden;
+  aspect-ratio:16/9;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.video-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(59,130,246,0.05) 0%,transparent 70%);
+}
+.play-btn{
+  width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 12px rgba(59,130,246,0.08),0 8px 32px rgba(59,130,246,0.25);
+  cursor:pointer;position:relative;z-index:1;transition:transform 0.2s;
+}
+.play-btn:hover{transform:scale(1.08)}
+.play-btn svg{width:22px;height:22px;fill:#fff;margin-left:3px}
+.video-label{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:12px;color:#94a3b8;z-index:1;white-space:nowrap}
+
+/* ── CTA ── */
+.cta-section{
+  font-family:'Inter',sans-serif;
+  background:#ffffff;
+  padding:96px 56px;
+  position:relative;overflow:hidden;
+}
+.cta-orb1{position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 65%);pointer-events:none}
+.cta-orb2{position:absolute;bottom:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.05) 0%,transparent 65%);pointer-events:none}
+
+.cta-inner{position:relative;z-index:1;max-width:720px;margin:0 auto;text-align:center}
+.cta-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;
+  background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);
+  border-radius:999px;font-size:12px;font-weight:500;color:#3b82f6;margin-bottom:28px;
+}
+.cta-title{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:clamp(32px,4vw,52px);font-weight:800;
+  color:#0f172a;line-height:1.08;letter-spacing:-0.03em;margin-bottom:20px;
+}
+.cta-title .grad{
+  background:linear-gradient(135deg,#3b82f6 20%,#6366f1 60%,#06b6d4 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cta-desc{font-size:16px;color:#64748b;line-height:1.7;max-width:520px;margin:0 auto 40px}
+
+.cta-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-cta{
+  display:inline-flex;align-items:center;gap:8px;padding:14px 28px;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  color:#fff;font-size:14px;font-weight:600;border-radius:10px;border:none;cursor:pointer;
+  text-decoration:none;font-family:'Inter',sans-serif;
+  transition:opacity 0.2s,transform 0.15s;
+  box-shadow:0 0 0 1px rgba(99,102,241,0.3),0 8px 24px rgba(59,130,246,0.2);
+}
+.btn-cta:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:6px;padding:14px 24px;
+  background:transparent;color:#475569;font-size:14px;font-weight:500;
+  border-radius:10px;border:1px solid #e2e8f0;
+  cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;
+  transition:background 0.2s,border-color 0.2s,color 0.2s;
+}
+.btn-ghost:hover{background:#f8fafc;border-color:#cbd5e1;color:#0f172a}
+
+.cta-trust{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+.cta-trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#94a3b8}
+.cta-trust-item svg{width:13px;height:13px;stroke:#22c55e;flex-shrink:0}
+
+@media(max-width:768px){
+  .cards{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .why,.how,.cta-section{padding:64px 24px}
+  .why-head-right{text-align:left}
+}
+</style>
+
+<!-- POURQUOI CVMAKER -->
+<section class="why">
+  <div class="why-inner">
+    <div class="why-head">
+      <div>
+        <div class="section-label">Pourquoi CVMaker</div>
+        <h2 class="section-title">Conçu pour le marché<br>canadien</h2>
+      </div>
+      <p class="why-head-right">Des outils pensés pour les standards RH canadiens — de Vancouver à Montréal.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 20 20"><path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 0114 0"/></svg>
+        </div>
+        <div class="card-title">Équipe experte</div>
+        <p class="card-text">Une équipe dédiée vous aide à créer un CV qui attire les recruteurs canadiens.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 20 20"><rect x="3" y="2" width="14" height="18" rx="2"/><path d="M7 7h6M7 11h6M7 15h4"/></svg>
+        </div>
+        <div class="card-title">Templates modernes</div>
+        <p class="card-text">50+ modèles professionnels validés par des RH canadiens.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 20 20"><path d="M13 2L4 11h6l-3 7 9-9h-6l3-7z"/></svg>
+        </div>
+        <div class="card-title">Rapide</div>
+        <p class="card-text">Créez et téléchargez votre CV en moins de 10 minutes. Zéro friction.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 20 20"><path d="M10 2l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg>
+        </div>
+        <div class="card-title">Score ATS</div>
+        <p class="card-text">Chaque CV est analysé et optimisé pour passer les filtres ATS automatiquement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="how">
+  <div class="how-inner">
+    <div class="how-head">
+      <div class="section-label">Comment ça marche</div>
+      <h2 class="section-title">Trois étapes, un CV parfait</h2>
+      <p class="section-desc">Simple, rapide, professionnel. Pas besoin d'être designer.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Choisissez un template</div>
+        <p class="step-text">Parcourez nos 50+ modèles validés et sélectionnez celui qui correspond à votre secteur.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Remplissez vos infos</div>
+        <p class="step-text">Notre éditeur guidé vous accompagne étape par étape pour ne rien oublier.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Exportez en PDF</div>
+        <p class="step-text">Téléchargez votre CV en un clic, optimisé ATS et prêt à envoyer.</p>
+      </div>
+    </div>
+
+    <div class="video-wrap">
+      {% comment %}
+      <iframe src="..." frameborder="0" allowfullscreen style="width:100%;height:100%"></iframe>
+      {% endcomment %}
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+      </div>
+      <span class="video-label">Voir la démo — 2 min</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-orb1"></div>
+  <div class="cta-orb2"></div>
+  <div class="cta-inner">
+    <div class="cta-badge">✦ Gratuit pour commencer</div>
+    <h2 class="cta-title">
+      Votre prochain emploi<br>commence par un <span class="grad">CV parfait</span>
+    </h2>
+    <p class="cta-desc">
+      Rejoignez 500+ professionnels qui ont décroché leur emploi au Canada grâce à CVMaker.
+    </p>
+    <div class="cta-btns">
+      <a href="/create-cv/" class="btn-cta">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M7 1v8M4 6l3 3 3-3"/><path d="M1 11h12"/>
+        </svg>
+        Créer mon CV gratuitement
+      </a>
+      <a href="/templates/" class="btn-ghost">Voir les templates →</a>
+    </div>
+    <div class="cta-trust">
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Aucune carte requise
+      </div>
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Export PDF instantané
+      </div>
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Données 100% sécurisées
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,315 @@
+<!-- templates/create_cv.html -->
+{% extends 'Saas/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+.ccv{font-family:'Inter',sans-serif}
+.grad{background:linear-gradient(135deg,#60a5fa 20%,#a78bfa 60%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-d{background:linear-gradient(135deg,#3b82f6,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ── HERO SOMBRE ── */
+.ccv-hero{
+  background:#05080f;padding:80px 56px 72px;
+  position:relative;overflow:hidden;text-align:center;
+}
+.ccv-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.hero-orb{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(59,130,246,0.12) 0%,transparent 65%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.hero-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:16px}
+.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;color:#f1f5f9;line-height:1.08;letter-spacing:-0.03em;margin-bottom:16px}
+.hero-desc{font-size:15px;color:#64748b;line-height:1.7;margin-bottom:40px}
+
+/* Steps indicator */
+.steps-bar{display:flex;align-items:center;justify-content:center;gap:0;max-width:560px;margin:0 auto}
+.step-item{display:flex;flex-direction:column;align-items:center;position:relative;flex:1}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:1px;background:rgba(255,255,255,0.08);z-index:0}
+.step-item.done:not(:last-child)::after{background:rgba(59,130,246,0.4)}
+.step-circle{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:#0d1117;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#475569;position:relative;z-index:1;transition:all 0.2s}
+.step-item.active .step-circle{background:linear-gradient(135deg,#3b82f6,#6366f1);border-color:transparent;color:#fff;box-shadow:0 0 0 4px rgba(59,130,246,0.15)}
+.step-item.done .step-circle{background:#111827;border-color:rgba(59,130,246,0.4);color:#3b82f6}
+.step-label{font-size:10px;color:#475569;margin-top:8px;text-align:center;letter-spacing:0.04em;text-transform:uppercase}
+.step-item.active .step-label{color:#93c5fd}
+
+/* ── FORM BLANC ── */
+.ccv-form{background:#ffffff;padding:72px 56px;position:relative;overflow:hidden}
+.ccv-form::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.form-inner{position:relative;z-index:1;max-width:1000px;margin:0 auto}
+.form-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+
+.form-section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0f172a;margin-bottom:6px}
+.form-section-sub{font-size:13px;color:#94a3b8;margin-bottom:28px}
+
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:600;color:#475569;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:7px}
+.form-input{width:100%;padding:11px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;font-size:14px;color:#0f172a;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.form-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.1);background:#fff}
+.form-input::placeholder{color:#cbd5e1}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-textarea{resize:vertical;min-height:90px}
+
+.form-progress{margin-bottom:28px}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:8px}
+.progress-label strong{color:#0f172a;font-weight:600}
+.progress-bar{height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#3b82f6,#6366f1);width:25%}
+
+.step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid #e2e8f0}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:transparent;color:#64748b;font-size:14px;font-weight:500;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;transition:background 0.2s,color 0.2s}
+.btn-back:hover{background:#f8fafc;color:#0f172a}
+.btn-next{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:14px;font-weight:600;border-radius:9px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s,transform 0.15s;box-shadow:0 4px 16px rgba(59,130,246,0.2)}
+.btn-next:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* CV Preview */
+.cv-preview{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;position:sticky;top:24px}
+.preview-header{background:#ffffff;border-bottom:1px solid #e2e8f0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.preview-title{font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em}
+.preview-actions{display:flex;gap:6px}
+.prev-btn{width:28px;height:28px;border-radius:7px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.prev-btn svg{width:12px;height:12px;stroke:#64748b;fill:none;stroke-width:1.8}
+
+.cv-doc{background:#fff;margin:12px;border-radius:8px;padding:20px;border:1px solid #e2e8f0;min-height:280px}
+.cv-doc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #3b82f6}
+.cv-doc-ava{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0}
+.cv-doc-name{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:#0f172a}
+.cv-doc-role{font-size:11px;color:#64748b;margin-top:2px}
+.cv-doc-contact{font-size:10px;color:#94a3b8;margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.cv-section{margin-bottom:12px}
+.cv-sec-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#3b82f6;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cv-sec-title::after{content:'';flex:1;height:1px;background:rgba(59,130,246,0.15)}
+.cv-line{height:7px;background:#f1f5f9;border-radius:3px;margin-bottom:4px}
+.cv-line.w90{width:90%}.cv-line.w70{width:70%}.cv-line.w55{width:55%}.cv-line.w80{width:80%}
+.cv-skill-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.cv-skill-pill{padding:2px 8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:999px;font-size:9px;color:#3b82f6}
+
+.ats-score{margin:0 12px 12px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.ats-left{font-size:11px;color:#64748b}
+.ats-val{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#22c55e;line-height:1}
+.ats-bar-wrap{flex:1;height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;margin:0 12px}
+.ats-bar-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:2px;width:72%}
+
+/* ── FEATURES SOMBRE ── */
+.ccv-features{background:#080c14;padding:72px 56px;position:relative;overflow:hidden}
+.ccv-features::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.feat-inner{position:relative;z-index:1;max-width:1000px;margin:0 auto}
+.feat-head{text-align:center;margin-bottom:48px}
+.feat-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:12px}
+.feat-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(24px,2.5vw,36px);font-weight:800;color:#f1f5f9;letter-spacing:-0.02em}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-card{background:#0d1117;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:24px;transition:border-color 0.2s,transform 0.2s}
+.feat-card:hover{border-color:rgba(59,130,246,0.2);transform:translateY(-2px)}
+.feat-icon{width:36px;height:36px;border-radius:8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-icon svg{width:16px;height:16px;stroke:#3b82f6;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feat-name{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:6px}
+.feat-text{font-size:12px;color:#64748b;line-height:1.6}
+
+@media(max-width:768px){
+  .ccv-hero,.ccv-form,.ccv-features{padding:56px 24px}
+  .form-layout{grid-template-columns:1fr}
+  .cv-preview{display:none}
+  .feat-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+
+<div class="ccv">
+
+  <!-- HERO : sombre -->
+  <section class="ccv-hero">
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+      <div class="hero-label">Créer mon CV</div>
+      <h1 class="hero-title">Votre CV canadien <span class="grad">en 4 étapes</span></h1>
+      <p class="hero-desc">Remplissez vos informations, choisissez un template et exportez un CV optimisé ATS en quelques minutes.</p>
+      <div class="steps-bar">
+        <div class="step-item active">
+          <div class="step-circle">1</div>
+          <div class="step-label">Profil</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">2</div>
+          <div class="step-label">Expérience</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">3</div>
+          <div class="step-label">Compétences</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">4</div>
+          <div class="step-label">Export</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM : blanc -->
+  <section class="ccv-form">
+    <div class="form-inner">
+      <div class="form-layout">
+
+        <!-- Formulaire gauche -->
+        <div>
+          <div class="form-progress">
+            <div class="progress-label">
+              <span>Étape 1 sur 4 — <strong>Informations personnelles</strong></span>
+              <span>25%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+          </div>
+
+          <div class="form-section-title">Informations personnelles</div>
+          <p class="form-section-sub">Ces informations apparaîtront en haut de votre CV.</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prénom</label>
+              <input type="text" class="form-input" placeholder="Khadim">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom</label>
+              <input type="text" class="form-input" placeholder="Fall">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Titre professionnel</label>
+            <input type="text" class="form-input" placeholder="ex: Développeur Full-Stack">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" placeholder="khadim@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Téléphone</label>
+              <input type="tel" class="form-input" placeholder="+1 (514) 000-0000">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Ville</label>
+              <input type="text" class="form-input" placeholder="Montréal">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Province</label>
+              <input type="text" class="form-input" placeholder="Québec">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Résumé professionnel</label>
+            <textarea class="form-input form-textarea" placeholder="Décrivez brièvement votre profil en 2-3 phrases..."></textarea>
+          </div>
+
+          <div class="step-nav">
+            <a href="#" class="btn-back">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2L3 6.5 8 11"/></svg>
+              Retour
+            </a>
+            <button class="btn-next">
+              Étape suivante
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 2l5 4.5L5 11"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Aperçu CV droite -->
+        <div>
+          <div class="cv-preview">
+            <div class="preview-header">
+              <span class="preview-title">Aperçu en direct</span>
+              <div class="preview-actions">
+                <div class="prev-btn">
+                  <svg viewBox="0 0 12 12"><path d="M1 4V1h3M8 1h3v3M11 8v3H8M4 11H1V8"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="cv-doc">
+              <div class="cv-doc-top">
+                <div class="cv-doc-ava">KF</div>
+                <div>
+                  <div class="cv-doc-name">Khadim Fall</div>
+                  <div class="cv-doc-role">Fondateur & Développeur</div>
+                  <div class="cv-doc-contact">
+                    <span>khadim@email.com</span>
+                    <span>Montréal, QC</span>
+                  </div>
+                </div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-sec-title">Résumé</div>
+                <div class="cv-line w90"></div>
+                <div class="cv-line w70"></div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-sec-title">Expérience</div>
+                <div class="cv-line w80"></div>
+                <div class="cv-line w55"></div>
+                <div class="cv-line w70"></div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-sec-title">Compétences</div>
+                <div class="cv-skill-row">
+                  <span class="cv-skill-pill">React</span>
+                  <span class="cv-skill-pill">Django</span>
+                  <span class="cv-skill-pill">TypeScript</span>
+                </div>
+              </div>
+            </div>
+            <div class="ats-score">
+              <div>
+                <div class="ats-left">Score ATS</div>
+                <div class="ats-val">72%</div>
+              </div>
+              <div class="ats-bar-wrap"><div class="ats-bar-fill"></div></div>
+              <div style="font-size:11px;color:#22c55e;font-weight:600">Bon</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES : sombre -->
+  <section class="ccv-features">
+    <div class="feat-inner">
+      <div class="feat-head">
+        <div class="feat-label">Inclus dans l'éditeur</div>
+        <h2 class="feat-title">Tout ce qu'il vous faut pour <span class="grad">un CV parfait</span></h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16"><path d="M8 1l1.5 4H14L10.5 8l1.5 4L8 9.5 4 12l1.5-4L2 5h4.5L8 1z"/></svg>
+          </div>
+          <div class="feat-name">Score ATS en temps réel</div>
+          <p class="feat-text">Votre score est mis à jour à chaque modification pour maximiser vos chances.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16"><rect x="2" y="1" width="12" height="14" rx="2"/><path d="M5 5h6M5 8h6M5 11h4"/></svg>
+          </div>
+          <div class="feat-name">Aperçu instantané</div>
+          <p class="feat-text">Visualisez votre CV en direct pendant que vous remplissez le formulaire.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16"><path d="M8 1v9M5 7l3 3 3-3"/><path d="M2 13h12"/></svg>
+          </div>
+          <div class="feat-name">Export PDF haute qualité</div>
+          <p class="feat-text">Téléchargez un PDF professionnel prêt à envoyer aux recruteurs canadiens.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}

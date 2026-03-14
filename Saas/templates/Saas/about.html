@@ -1,0 +1,228 @@
+<!-- templates/about.html -->
+{% extends 'Saas/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Bricolage+Grotesque:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+.grad{background:linear-gradient(135deg,#60a5fa 20%,#a78bfa 60%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-dark{background:linear-gradient(135deg,#3b82f6 20%,#6366f1 60%,#06b6d4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.grid-bg-dark{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.grid-bg-light{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+
+/* ── HERO — sombre ── */
+.ah{
+  font-family:'Inter',sans-serif;
+  background:#05080f;
+  padding:120px 56px 96px;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.ah-orb{position:absolute;top:-140px;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(59,130,246,0.1) 0%,transparent 65%);pointer-events:none}
+.ah-label{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:20px}
+.ah-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(38px,5vw,64px);font-weight:800;color:#f1f5f9;line-height:1.06;letter-spacing:-0.03em;margin-bottom:24px;max-width:720px}
+.ah-desc{font-size:16px;color:#64748b;line-height:1.75;max-width:520px;margin-bottom:56px}
+.stats{display:flex;gap:0;border:1px solid rgba(255,255,255,0.07);border-radius:14px;overflow:hidden;max-width:580px;width:100%}
+.s-item{flex:1;padding:20px;text-align:center;border-right:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02)}
+.s-item:last-child{border-right:none}
+.s-val{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;color:#60a5fa;display:block;line-height:1}
+.s-lbl{font-size:11px;color:#475569;margin-top:5px;text-transform:uppercase;letter-spacing:0.06em}
+
+/* ── MISSION — blanc ── */
+.am{
+  font-family:'Inter',sans-serif;
+  background:#ffffff;
+  padding:96px 56px;
+  position:relative;overflow:hidden;
+}
+.am-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.am-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.am-eyebrow::before{content:'';display:block;width:20px;height:1px;background:#3b82f6}
+.am-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(26px,2.5vw,38px);font-weight:800;color:#0f172a;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.am-text{font-size:15px;color:#64748b;line-height:1.8}
+.am-card{background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.am-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#3b82f6,#6366f1)}
+.am-quote{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:700;color:#0f172a;line-height:1.55;margin-bottom:24px;font-style:italic}
+.am-quote span{color:#3b82f6;font-style:normal}
+.am-author{display:flex;align-items:center;gap:12px}
+.am-ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.am-name{font-size:13px;font-weight:600;color:#0f172a}
+.am-role{font-size:11px;color:#94a3b8;margin-top:1px}
+
+/* ── ÉQUIPE — blanc ── */
+.at{
+  font-family:'Inter',sans-serif;
+  background:#f8fafc;
+  padding:96px 56px;
+  position:relative;overflow:hidden;
+  border-top:1px solid #e2e8f0;
+}
+.at-head{text-align:center;margin-bottom:56px}
+.at-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:14px}
+.at-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(26px,2.5vw,38px);font-weight:800;color:#0f172a;letter-spacing:-0.02em;margin-bottom:12px}
+.at-desc{font-size:15px;color:#64748b;max-width:400px;margin:0 auto}
+
+.founder-card{
+  max-width:360px;margin:0 auto;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:16px;padding:40px 32px;
+  text-align:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.06);
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.founder-card:hover{box-shadow:0 8px 40px rgba(59,130,246,0.1);transform:translateY(-3px)}
+.founder-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#3b82f6,#6366f1)}
+
+.founder-ava{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;color:#fff;
+  margin:0 auto 20px;
+  box-shadow:0 0 0 6px rgba(59,130,246,0.08);
+}
+.founder-name{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0f172a;margin-bottom:4px}
+.founder-role{font-size:13px;color:#3b82f6;font-weight:500;margin-bottom:16px}
+.founder-divider{height:1px;background:#e2e8f0;margin:20px 0}
+.founder-bio{font-size:13px;color:#64748b;line-height:1.7}
+.founder-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:20px}
+.founder-tag{padding:4px 12px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:999px;font-size:11px;color:#3b82f6;font-weight:500}
+
+/* ── CTA — blanc ── */
+.ac{
+  font-family:'Inter',sans-serif;
+  background:#ffffff;
+  padding:96px 56px;
+  text-align:center;
+  position:relative;overflow:hidden;
+  border-top:1px solid #e2e8f0;
+}
+.ac-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(59,130,246,0.05) 0%,transparent 65%);pointer-events:none}
+.ac-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3.5vw,46px);font-weight:800;color:#0f172a;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px;position:relative;z-index:1}
+.ac-desc{font-size:15px;color:#64748b;margin-bottom:32px;position:relative;z-index:1}
+.ac-btns{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:1}
+.btn-p{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:14px;font-weight:600;border-radius:9px;border:none;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;transition:opacity 0.2s,transform 0.15s;box-shadow:0 0 0 1px rgba(99,102,241,0.3),0 8px 24px rgba(59,130,246,0.2)}
+.btn-p:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-g{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;background:transparent;color:#475569;font-size:14px;font-weight:500;border-radius:9px;border:1px solid #e2e8f0;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;transition:background 0.2s,border-color 0.2s,color 0.2s}
+.btn-g:hover{background:#f1f5f9;border-color:#cbd5e1;color:#0f172a}
+.ac-trust{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:24px;position:relative;z-index:1}
+.ac-trust-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#94a3b8}
+.ac-trust-item svg{width:12px;height:12px;stroke:#22c55e;flex-shrink:0}
+
+@media(max-width:768px){
+  .ah,.am,.at,.ac{padding:64px 24px}
+  .am-grid{grid-template-columns:1fr}
+  .stats{flex-direction:column}
+  .s-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)}
+  .s-item:last-child{border-bottom:none}
+}
+</style>
+
+<!-- HERO : sombre -->
+<section class="ah">
+  <div class="grid-bg-dark"></div>
+  <div class="ah-orb"></div>
+  <div class="inner" style="display:flex;flex-direction:column;align-items:center">
+    <div class="ah-label">À propos</div>
+    <h1 class="ah-title">On aide les gens à <span class="grad">décrocher leur emploi</span> au Canada</h1>
+    <p class="ah-desc">CVMaker est un outil simple et professionnel conçu pour le marché canadien. Fondé à Montréal en 2023.</p>
+    <div class="stats">
+      <div class="s-item"><span class="s-val">500+</span><span class="s-lbl">CV créés</span></div>
+      <div class="s-item"><span class="s-val">50+</span><span class="s-lbl">Templates</span></div>
+      <div class="s-item"><span class="s-val">94%</span><span class="s-lbl">Score ATS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION : blanc -->
+<section class="am">
+  <div class="grid-bg-light"></div>
+  <div class="inner">
+    <div class="am-grid">
+      <div>
+        <div class="am-eyebrow">Notre mission</div>
+        <h2 class="am-title">Un CV canadien,<br><span class="grad-dark">en quelques minutes</span></h2>
+        <p class="am-text">Les recruteurs canadiens ont des attentes précises — format, longueur, contenu. CVMaker vous aide à les respecter sans effort, avec des templates validés et un score ATS intégré.</p>
+      </div>
+      <div class="am-card">
+        <p class="am-quote">"Chaque professionnel mérite un CV qui <span>reflète fidèlement sa valeur</span>, peu importe d'où il vient."</p>
+        <div class="am-author">
+          <div class="am-ava">KF</div>
+          <div>
+            <div class="am-name">Khadim Fall</div>
+            <div class="am-role">Fondateur & CEO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÉQUIPE : blanc -->
+<section class="at">
+  <div class="grid-bg-light"></div>
+  <div class="inner">
+    <div class="at-head">
+      <div class="at-label">Le fondateur</div>
+      <h2 class="at-title">Derrière <span class="grad-dark">CVMaker</span></h2>
+      <p class="at-desc">Un projet conçu et développé avec passion depuis Montréal.</p>
+    </div>
+
+    <div class="founder-card">
+      <div class="founder-ava">KF</div>
+      <div class="founder-name">Khadim Fall</div>
+      <div class="founder-role">Fondateur & CEO</div>
+      <div class="founder-divider"></div>
+      <p class="founder-bio">
+        Passionné par la technologie et le marché du travail canadien, Khadim a créé CVMaker pour aider les professionnels à se démarquer avec un CV adapté aux standards locaux.
+      </p>
+      <div class="founder-tags">
+        <span class="founder-tag">Produit</span>
+        <span class="founder-tag">Design</span>
+        <span class="founder-tag">Développement</span>
+        <span class="founder-tag">Montréal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA : blanc -->
+<section class="ac">
+  <div class="grid-bg-light"></div>
+  <div class="ac-orb"></div>
+  <div class="inner">
+    <h2 class="ac-title">Prêt à créer votre <span class="grad-dark">CV canadien</span> ?</h2>
+    <p class="ac-desc">Gratuit, rapide, professionnel. Aucune carte requise.</p>
+    <div class="ac-btns">
+      <a href="{% url 'create-cv' %}" class="btn-p">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M6.5 1v7M4 5.5l2.5 2.5 2.5-2.5"/><path d="M1 10.5h11"/>
+        </svg>
+        Créer mon CV
+      </a>
+      <a href="#" class="btn-g">Voir les templates →</a>
+    </div>
+    <div class="ac-trust">
+      <div class="ac-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Aucune carte requise
+      </div>
+      <div class="ac-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Export PDF instantané
+      </div>
+      <div class="ac-trust-item">
+        <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+        Données sécurisées
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

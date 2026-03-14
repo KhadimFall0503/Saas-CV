@@ -1,0 +1,285 @@
+<!-- templates/home.html -->
+{% load static %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+.hero{
+  font-family:'Inter',sans-serif;
+  background:#05080f;
+  position:relative;
+  overflow:hidden;
+  padding:140px 56px 80px;
+}
+
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 100%);
+}
+
+.orb1{position:absolute;top:-160px;right:-60px;width:560px;height:560px;background:radial-gradient(circle,rgba(59,130,246,0.14) 0%,transparent 65%);pointer-events:none}
+.orb2{position:absolute;bottom:-120px;left:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 65%);pointer-events:none}
+
+.hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+
+.hero-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:48px;flex-wrap:wrap;gap:16px;
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px 6px 8px;
+  background:rgba(59,130,246,0.07);
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:999px;
+  font-size:12px;font-weight:500;color:#93c5fd;
+}
+.badge-dot{width:20px;height:20px;background:rgba(59,130,246,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.badge-dot::after{content:'';display:block;width:6px;height:6px;background:#3b82f6;border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.hero-proof{display:flex;align-items:center;gap:10px}
+.proof-avatars{display:flex}
+.proof-avatars span{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid #05080f;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:#fff;
+  margin-left:-8px;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+}
+.proof-avatars span:first-child{margin-left:0}
+.proof-avatars span:nth-child(2){background:linear-gradient(135deg,#06b6d4,#3b82f6)}
+.proof-avatars span:nth-child(3){background:linear-gradient(135deg,#8b5cf6,#ec4899)}
+.proof-avatars span:nth-child(4){background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.proof-text{font-size:12px;color:#64748b}
+.proof-text strong{color:#94a3b8;font-weight:500}
+
+.hero-layout{
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:48px;
+  align-items:center;
+}
+
+.hero-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:#3b82f6;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:#3b82f6}
+
+h1{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:clamp(34px,3.5vw,54px);
+  font-weight:800;color:#f1f5f9;
+  line-height:1.08;letter-spacing:-0.03em;
+  margin-bottom:24px;
+}
+h1 .grad{
+  background:linear-gradient(135deg,#60a5fa 20%,#a78bfa 60%,#38bdf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-desc{
+  font-size:15px;line-height:1.75;color:#64748b;
+  max-width:400px;margin-bottom:36px;
+}
+
+.cta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:44px}
+
+.btn-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 24px;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  color:#fff;font-size:14px;font-weight:600;
+  border-radius:10px;border:none;cursor:pointer;
+  text-decoration:none;font-family:'Inter',sans-serif;
+  transition:opacity 0.2s,transform 0.15s;
+  box-shadow:0 0 0 1px rgba(99,102,241,0.4),0 8px 24px rgba(59,130,246,0.25);
+}
+.btn-cta:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-cta svg{width:14px;height:14px}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:13px 20px;
+  background:rgba(255,255,255,0.04);
+  color:#94a3b8;font-size:14px;font-weight:500;
+  border-radius:10px;border:1px solid rgba(255,255,255,0.08);
+  cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;
+  transition:background 0.2s,border-color 0.2s,color 0.2s;
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.14);color:#e2e8f0}
+
+.trust-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#475569}
+.trust-item svg{width:13px;height:13px;flex-shrink:0;stroke:#22c55e}
+
+/* Image côté droit */
+.hero-visual{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px 0;
+}
+
+.visual-glow{
+  position:absolute;inset:-40px;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(59,130,246,0.13) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.visual-frame{
+  position:relative;
+  border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.09);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.04),0 24px 64px rgba(0,0,0,0.5);
+  width:120%;
+  margin-left:-10%;
+}
+.visual-frame img{display:block;width:100%;height:auto;border-radius:16px}
+
+.visual-badge{
+  position:absolute;top:6px;right:4px;
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 14px;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  border-radius:999px;
+  font-size:11px;font-weight:600;color:#fff;
+  font-family:'Bricolage Grotesque',sans-serif;
+  box-shadow:0 4px 20px rgba(59,130,246,0.35);
+  z-index:2;
+}
+.vb-dot{width:6px;height:6px;background:rgba(255,255,255,0.7);border-radius:50%;animation:blink 2s infinite}
+
+.visual-tag{
+  position:absolute;bottom:40px;right:-4px;
+  display:flex;align-items:center;gap:10px;
+  background:#111827;
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px;padding:10px 14px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  z-index:2;
+}
+.vtag-icon{width:28px;height:28px;background:rgba(34,197,94,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vtag-text{display:flex;flex-direction:column;gap:2px}
+.vtag-top{font-size:11px;font-weight:600;color:#22c55e}
+.vtag-bot{font-size:10px;color:#475569}
+
+.visual-score{
+  position:absolute;top:40px;left:6px;
+  display:flex;flex-direction:column;align-items:center;
+  background:#111827;
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px;padding:10px 16px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  z-index:2;
+}
+.score-num{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#60a5fa;line-height:1}
+.score-lbl{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px}
+
+@media(max-width:720px){
+  .hero-layout{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .hero{padding:110px 24px 56px}
+  .hero-top{flex-direction:column;align-items:flex-start}
+}
+</style>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+
+  <div class="hero-inner">
+
+    <div class="hero-layout">
+
+      <!-- LEFT -->
+      <div>
+        <div class="hero-eyebrow">Générateur de CV Canadien</div>
+        <h1>
+          Décrochez votre<br>
+          prochain emploi<br>
+          <span class="grad">au Canada</span>
+        </h1>
+        <p class="hero-desc">
+          Créez un CV optimisé ATS, adapté aux standards canadiens, en quelques minutes.
+          Modèles professionnels, personnalisation avancée, export PDF instantané.
+        </p>
+
+        <div class="cta-row">
+          <a href="#" class="btn-cta">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M7 1v8M4 6l3 3 3-3"/><path d="M1 11h12"/>
+            </svg>
+            Créer mon CV gratuitement
+          </a>
+          <a href="#" class="btn-ghost">
+            Voir les templates
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+              <path d="M2 7h10M7 2l5 5-5 5"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="trust-row">
+          <div class="trust-item">
+            <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+            Aucune carte requise
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+            Export PDF instantané
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 13 13" fill="none" stroke-width="2"><path d="M2 7l3 3 6-6"/></svg>
+            100% conforme RH canadiennes
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT : image -->
+      <div class="hero-visual">
+        <div class="visual-glow"></div>
+
+        <div class="visual-badge">
+          <div class="vb-dot"></div>
+          ✦ Modèle Canadien
+        </div>
+
+        <div class="visual-frame">
+          <img src="{% static 'Saas/fond.png' %}" alt="Aperçu CV canadien">
+        </div>
+
+        <div class="visual-score">
+          <span class="score-num">94</span>
+          <span class="score-lbl">Score ATS</span>
+        </div>
+
+        <div class="visual-tag">
+          <div class="vtag-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M6.5 1l1.4 4.2H12L8.8 7.8l1.4 4.2-3.7-2.7-3.7 2.7 1.4-4.2L1 5.2h4.1L6.5 1z" fill="#22c55e"/>
+            </svg>
+          </div>
+          <div class="vtag-text">
+            <span class="vtag-top">ATS-optimisé</span>
+            <span class="vtag-bot">Conforme RH canadiennes</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
