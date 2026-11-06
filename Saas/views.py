@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.urls import reverse_lazy
-from .models import CV
+from .models import CV, TemplateCV
+from django.http import HttpResponse
+from docx import Document
 
 
 class CVView(TemplateView):
@@ -122,3 +124,50 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         user.save()
         messages.success(request, 'Profil mis à jour avec succès.')
         return redirect('profile')
+    
+    
+class TemplateListView(TemplateView):
+    template_name = 'Saas/modeles.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['templates'] = TemplateCV.objects.all()
+        return context
+    
+    
+def download_template(request, pk):
+    template = TemplateCV.objects.get(id=pk)
+
+    doc = Document()
+
+    # TITRE
+    doc.add_heading(template.name, level=1)
+
+    # CATÉGORIE
+    doc.add_paragraph(f"Catégorie : {template.category}")
+
+    # DESCRIPTION
+    doc.add_paragraph(template.description)
+
+    # SECTION CV BASIQUE
+    doc.add_heading("Profil", level=2)
+    doc.add_paragraph("Votre profil ici...")
+
+    doc.add_heading("Expérience", level=2)
+    doc.add_paragraph("Vos expériences...")
+
+    doc.add_heading("Compétences", level=2)
+    doc.add_paragraph("Python, Django, React...")
+
+    # EXPORT
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    )
+
+    response['Content-Disposition'] = f'attachment; filename="{template.name}.docx"'
+
+    doc.save(response)
+
+    return response
+    
+    
